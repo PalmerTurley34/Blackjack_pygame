@@ -1,5 +1,11 @@
 SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 500
 
+BUTTON_WIDTH = 80
+BUTTON_HEIGHT = 40
+
+CARD_WIDTH = 50
+CARD_HEIGHT = 80
+
 API_URL = 'https://deckofcardsapi.com/api/deck/'
 
