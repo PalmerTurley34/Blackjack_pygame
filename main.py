@@ -66,6 +66,7 @@ game_start = game_font.render('Press "New Deal" to play!', 1, 'white')
 place_bid = game_font.render('Bid $25, $50, or $100', 1, 'white')
 bust = game_font.render('BUST!!', 1, 'white')
 win = game_font.render('YOU WIN!!', 1, 'white')
+lose = game_font.render('YOU LOSE!', 1, 'white')
 stay_or_hit_me = game_font.render('Stay or Hit me?', 1, 'white')
 def blit_instructions(instruction):
     pygame.draw.rect(screen, 'black', pygame.Rect(0, 0, 500, 100))
@@ -117,6 +118,8 @@ while True:
                 dealer.card_images = []
                 player.card_values = 0
                 dealer.card_values = 0
+                player.has_ace = False
+                dealer.has_ace = False
                 # change active buttons and instructions
                 blit_instructions(place_bid)
                 new_deal_active = False
@@ -131,16 +134,29 @@ while True:
                 if player.card_values > 21 and player.has_ace:
                     player.card_values -= 10
                     player.has_ace = False
-                elif player.card_values > 21 and not player.has_ace:
+                elif player.card_values > 21 and player.has_ace == False:
                     hit_me_active = False
                     stay_active = False
                     player.money -= player.bid
                     blit_instructions(bust)
-                    pygame.time.delay(3000)
                     new_deal_active = True             
 # STAY
             elif stay[0] <= mouse[0] <= stay[0] + BUTTON_WIDTH and stay[1] <= mouse[1] <= stay[1] + BUTTON_HEIGHT and stay_active:
-                pygame.quit()
+                hit_me_active = False
+                stay_active = False
+                screen.blit(dealer.card_images[0], (0, 175))
+                while dealer.card_values < 17:
+                    deck.draw(dealer)
+                    if dealer.card_values > 21 and dealer.has_ace:
+                        dealer.has_ace = False
+                        dealer.card_values -= 10
+                if dealer.card_values >= player.card_values and dealer.card_values < 21:
+                    blit_instructions(lose)
+                    player.money -= player.bid
+                else:
+                    blit_instructions(win)
+                    player.money += player.bid
+                new_deal_active = True
 # BID 25
             elif bid_25[0] <= mouse[0] <= bid_25[0] + BUTTON_WIDTH and bid_25[1] <= mouse[1] <= bid_25[1] + BUTTON_HEIGHT and bid_25_active:
                 # set the bid and deal
