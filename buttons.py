@@ -1,13 +1,11 @@
 import requests
 import io
-import pygame.font as font
+from fonts import button_font
 
 # image for the buttons
 button_url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_OroZCy9_5t6HzCiKnUG2Z1o5WlWaWsr2Rg&usqp=CAU"
 r = requests.get(button_url).content
 button_file = io.BytesIO(r)
-# font for the text on the buttons
-button_font = font.SysFont('comicsans', 20, True)
 # info for all the buttons (coordinates and text)
 hit_me = (380, 405)
 stay = (380, 455)

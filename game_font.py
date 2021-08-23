@@ -1,10 +1,9 @@
-import pygame.font as font
+from fonts import game_font
 
 # font for game use
-game_font = font.SysFont('comicsans', 30, True)
 dealer_hand = game_font.render('Dealer Hand:', 1, 'white')
 player_hand = game_font.render('Your Hand:', 1, 'white')
-player_money = game_font.render(f'{player.name}\'s Money:', 1, 'white')
+player_money = game_font.render('Your Money:', 1, 'white')
 player_bid = game_font.render('Your Bid:', 1, 'white')
 
 # instruction text to be diplayed at the top of the screen
