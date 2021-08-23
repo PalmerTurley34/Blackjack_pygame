@@ -1,7 +1,10 @@
+# imports
 import pygame
 from constants import *
 from cards_API import *
 from buttons import *
+from game_font import *
+
 # initialize pygame
 pygame.init()
 pygame.display.set_caption('Blackjack')
@@ -21,14 +24,7 @@ screen.blit(button_img, (bid_25[0], bid_25[1]))
 screen.blit(button_img, (bid_50[0], bid_50[1]))
 screen.blit(button_img, (bid_100[0], bid_100[1]))
 
-# text on buttons
-button_font = pygame.font.SysFont('comicsans', 20, True)
-hit_me_text = button_font.render('Hit Me', 1, (0,0,0))
-stay_text = button_font.render('Stay', 1, (0,0,0))
-new_deal_text = button_font.render('New Deal', 1, 'black')
-bid_25_text = button_font.render('Bid $25', 1, 'black')
-bid_50_text = button_font.render('Bid $50', 1, 'black')
-bid_100_text = button_font.render('Bid $100', 1, 'black')
+# put text on the buttons
 screen.blit(hit_me_text, (hit_me[0]+15, hit_me[1]+15))
 screen.blit(stay_text, (stay[0]+23, stay[1]+15))
 screen.blit(new_deal_text, (new_deal[0]+8, new_deal[1]+15))
@@ -46,28 +42,17 @@ deck = Deck(deck_id)
 player = Player('Palmer')
 dealer = Player('Dealer')
 
-# put text on the screen
-game_font = pygame.font.SysFont('comicsans', 30, True)
-dealer_hand = game_font.render('Dealer Hand:', 1, 'white')
-player_hand = game_font.render('Your Hand:', 1, 'white')
-player_money = game_font.render('Your Money:', 1, 'white')
-player_bid = game_font.render('Your Bid:', 1, 'white')
+# functions to use in the game loop
+# puts the amount of money you have on the screen
 def blit_chips():
     num_money = game_font.render(f'${player.money}', 1, 'green')
     screen.blit(num_money, (350, 300))
-
+# puts your current bid on the screen
 def blit_bid():
     bid = game_font.render(f'${player.bid}', 1, 'white')
     screen.blit(player_bid, (300, 150))
     screen.blit(bid, (350, 175))
-
-# instruction text to be diplayed at the top of the screen
-game_start = game_font.render('Press "New Deal" to play!', 1, 'white')
-place_bid = game_font.render('Bid $25, $50, or $100', 1, 'white')
-bust = game_font.render('BUST!!', 1, 'white')
-win = game_font.render('YOU WIN!!', 1, 'white')
-lose = game_font.render('YOU LOSE!', 1, 'white')
-stay_or_hit_me = game_font.render('Stay or Hit me?', 1, 'white')
+# function for putting the game instructions on the screen
 def blit_instructions(instruction):
     pygame.draw.rect(screen, 'black', pygame.Rect(0, 0, 500, 100))
     text_rect = instruction.get_rect(center=(SCREEN_WIDTH/2, 50))
@@ -80,15 +65,7 @@ def reset_screen():
     screen.blit(player_hand, (0, 275))
     screen.blit(player_money, (300, 275))
     blit_chips()
-
-# keep track of which buttons are active at each stage of the game
-new_deal_active = True
-hit_me_active = False
-stay_active = False
-bid_25_active = False
-bid_50_active = False
-bid_100_active = False
-
+# shuffles and deals the cards
 def deal_cards():
     deck.shuffle()
     deck.draw(dealer)
@@ -147,6 +124,8 @@ while True:
                 screen.blit(dealer.card_images[0], (0, 175))
                 while dealer.card_values < 17:
                     deck.draw(dealer)
+                    i = len(dealer.card_images) - 1
+                    screen.blit(dealer.card_images[i], (i*60, 175))
                     if dealer.card_values > 21 and dealer.has_ace:
                         dealer.has_ace = False
                         dealer.card_values -= 10
